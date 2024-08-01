@@ -11,7 +11,7 @@ namespace Assets.Lawis.Factory
         private Dictionary<string, T> _itemDictionary;
         public Dictionary<string, T> ItemDictionary { get => _itemDictionary; private set => _itemDictionary = value; }
 
-        private void Awake()
+        public void Init()
         {
             ItemDictionary = new Dictionary<string, T>();
             foreach (var item in itemPrefabs)
