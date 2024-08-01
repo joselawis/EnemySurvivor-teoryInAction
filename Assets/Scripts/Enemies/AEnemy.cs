@@ -1,7 +1,8 @@
+using Assets.Lawis.Factory;
 using System.Collections;
 using UnityEngine;
 
-public abstract class AEnemy : MonoBehaviour, IMortal
+public abstract class AEnemy : GenericFactorableItem, IMortal
 {
     [SerializeField] private float health;
     [SerializeField] private float speed;
@@ -31,16 +32,19 @@ public abstract class AEnemy : MonoBehaviour, IMortal
 
     protected virtual void Update()
     {
-        float distance = (Target.transform.position - transform.position).magnitude;
-        if (distance > DistanceOfAttack && CanMove)
+        if (GameManager.Instance.IsGameActive)
         {
-            Move();
-        }
-        else
-        {
-            if (CanAttack)
+            float distance = (Target.transform.position - transform.position).magnitude;
+            if (distance > DistanceOfAttack && CanMove)
             {
-                Attack();
+                Move();
+            }
+            else
+            {
+                if (CanAttack)
+                {
+                    Attack();
+                }
             }
         }
     }
@@ -77,5 +81,14 @@ public abstract class AEnemy : MonoBehaviour, IMortal
     public void Die()
     {
         Destroy(gameObject);
+    }
+
+    private void OnMouseDown()
+    {
+        if (GameManager.Instance.IsGameActive)
+        {
+            Die();
+            GameManager.Instance.AddPoints(Mathf.FloorToInt(damagePoints));
+        }
     }
 }
